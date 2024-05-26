@@ -1,9 +1,9 @@
 package com.limikju.op.service.memberService;
 
 import com.limikju.op.domain.Member;
-import com.limikju.op.domain.dto.MemberDTO.MemberInfoDto;
-import com.limikju.op.domain.dto.MemberDTO.MemberSignUpDto;
-import com.limikju.op.domain.dto.MemberDTO.MemberUpdateDto;
+import com.limikju.op.domain.dto.memberDTO.MemberInfoDto;
+import com.limikju.op.domain.dto.memberDTO.MemberSignUpDto;
+import com.limikju.op.domain.dto.memberDTO.MemberUpdateDto;
 import com.limikju.op.repository.MemberRepository;
 import com.limikju.op.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -63,12 +63,6 @@ public class MemberServiceImpl implements MemberService{
         }
 
         memberRepository.delete(member);
-    }
-
-    @Override
-    public MemberInfoDto getInfo(Long id) throws Exception {
-        Member findMember = memberRepository.findById(id).orElseThrow(() -> new Exception("회원이 없습니다"));
-        return new MemberInfoDto(findMember);
     }
 
     @Override

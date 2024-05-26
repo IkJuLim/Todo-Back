@@ -1,4 +1,4 @@
-package com.limikju.op.domain.dto.MemberDTO;
+package com.limikju.op.domain.dto.memberDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

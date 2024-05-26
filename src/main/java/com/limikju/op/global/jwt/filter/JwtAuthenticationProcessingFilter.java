@@ -19,9 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
@@ -31,7 +28,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
-    private final String NO_CHECK_URL = "/login";
+    private final String NO_CHECK_URL = "/api/member/login";
 
     /**
      * 1. 리프레시 토큰이 오는 경우 -> 유효하면 AccessToken 재발급후, 필터 진행 X, 바로 튕기기
@@ -47,14 +44,11 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
         String refreshToken = jwtService.extractRefreshToken(request).filter(jwtService::isTokenValid).orElse(null);
 
-
         if(refreshToken != null){
             checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
             return;
         }
-
         checkAccessTokenAndAuthentication(request, response, filterChain);
-
     }
 
 
@@ -62,20 +56,14 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         jwtService.extractAccessToken(request).ifPresent(
-
                 accessToken -> jwtService.extractUsername(accessToken).ifPresent(
-
                         username -> memberRepository.findByUsername(username).ifPresent(
-
                                 member -> saveAuthentication(member)
                         )
                 )
         );
-
         filterChain.doFilter(request,response);
     }
-
-
 
     private void saveAuthentication(Member member) {
         UserDetails user = User.builder()
@@ -86,19 +74,14 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null,authoritiesMapper.mapAuthorities(user.getAuthorities()));
 
-
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
     }
 
     private void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
-
-
         memberRepository.findByRefreshToken(refreshToken).ifPresent(
                 member -> jwtService.sendAccessToken(response, jwtService.createAccessToken(member.getUsername()))
         );
-
-
     }
 }

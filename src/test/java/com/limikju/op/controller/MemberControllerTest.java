@@ -2,7 +2,7 @@ package com.limikju.op.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.limikju.op.domain.Member;
-import com.limikju.op.domain.dto.MemberDTO.MemberSignUpDto;
+import com.limikju.op.domain.dto.memberDTO.MemberSignUpDto;
 import com.limikju.op.repository.MemberRepository;
 import com.limikju.op.service.memberService.MemberService;
 import jakarta.persistence.EntityManager;

@@ -1,8 +1,8 @@
 package com.limikju.op.service.memberService;
 
-import com.limikju.op.domain.dto.MemberDTO.MemberInfoDto;
-import com.limikju.op.domain.dto.MemberDTO.MemberSignUpDto;
-import com.limikju.op.domain.dto.MemberDTO.MemberUpdateDto;
+import com.limikju.op.domain.dto.memberDTO.MemberInfoDto;
+import com.limikju.op.domain.dto.memberDTO.MemberSignUpDto;
+import com.limikju.op.domain.dto.memberDTO.MemberUpdateDto;
 
 public interface MemberService {
 
@@ -20,8 +20,6 @@ public interface MemberService {
     void updatePassword(String checkPassword, String toBePassword) throws Exception;
 
     void withdraw(String checkPassword) throws Exception;
-
-    MemberInfoDto getInfo(Long id) throws Exception;
 
     MemberInfoDto getMyInfo() throws Exception;
 }

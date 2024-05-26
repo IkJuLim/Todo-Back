@@ -1,6 +1,6 @@
 package com.limikju.op.controller;
 
-import com.limikju.op.domain.dto.MemberDTO.*;
+import com.limikju.op.domain.dto.memberDTO.*;
 import com.limikju.op.service.memberService.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/member")
 public class MemberController {
 
     private final MemberService memberService;
+
     /**
      * 회원가입
      */
-    @PostMapping("/signUp")
+    @PostMapping("/join")
     @ResponseStatus(HttpStatus.OK)
     public void signUp(@Valid @RequestBody MemberSignUpDto memberSignUpDto) throws Exception {
         memberService.signUp(memberSignUpDto);
@@ -26,46 +28,26 @@ public class MemberController {
     /**
      * 회원정보수정
      */
-    @PutMapping("/member")
+    @PatchMapping
     @ResponseStatus(HttpStatus.OK)
     public void updateBasicInfo(@Valid @RequestBody MemberUpdateDto memberUpdateDto) throws Exception {
         memberService.update(memberUpdateDto);
     }
 
     /**
-     * 비밀번호 수정
-     */
-    @PutMapping("/member/password")
-    @ResponseStatus(HttpStatus.OK)
-    public void updatePassword(@Valid @RequestBody UpdatePasswordDto updatePasswordDto) throws Exception {
-        memberService.updatePassword(updatePasswordDto.checkPassword(),updatePasswordDto.toBePassword());
-    }
-
-    /**
      * 회원탈퇴
      */
-    @DeleteMapping("/member")
+    @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     public void withdraw(@Valid @RequestBody MemberWithdrawDto memberWithdrawDto) throws Exception {
         memberService.withdraw(memberWithdrawDto.checkPassword());
     }
 
-
-    /**
-     * 회원정보조회
-     */
-    @GetMapping("/member/{id}")
-    public ResponseEntity getInfo(@Valid @PathVariable("id") Long id) throws Exception {
-        MemberInfoDto info = memberService.getInfo(id);
-        return new ResponseEntity(info, HttpStatus.OK);
-    }
-
     /**
      * 내정보조회
      */
-    @GetMapping("/member")
+    @GetMapping
     public ResponseEntity getMyInfo(HttpServletResponse response) throws Exception {
-
         MemberInfoDto info = memberService.getMyInfo();
         return new ResponseEntity(info, HttpStatus.OK);
     }

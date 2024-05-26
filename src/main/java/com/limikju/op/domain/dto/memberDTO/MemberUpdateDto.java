@@ -1,4 +1,4 @@
-package com.limikju.op.domain.dto.MemberDTO;
+package com.limikju.op.domain.dto.memberDTO;
 
 import java.util.Optional;
 

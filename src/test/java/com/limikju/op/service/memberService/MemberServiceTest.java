@@ -1,9 +1,9 @@
 package com.limikju.op.service.memberService;
 
 import com.limikju.op.domain.Member;
-import com.limikju.op.domain.dto.MemberDTO.MemberInfoDto;
-import com.limikju.op.domain.dto.MemberDTO.MemberSignUpDto;
-import com.limikju.op.domain.dto.MemberDTO.MemberUpdateDto;
+import com.limikju.op.domain.dto.memberDTO.MemberInfoDto;
+import com.limikju.op.domain.dto.memberDTO.MemberSignUpDto;
+import com.limikju.op.domain.dto.memberDTO.MemberUpdateDto;
 import com.limikju.op.domain.enums.MemberRole;
 import com.limikju.op.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
@@ -333,26 +333,6 @@ class MemberServiceTest {
         //when, then TODO : MemberException으로 고쳐야 함
         assertThat(assertThrows(Exception.class ,() -> memberService.withdraw(PASSWORD+"1")).getMessage()).isEqualTo("비밀번호가 일치하지 않습니다.");
 
-    }
-
-
-
-
-    @Test
-    public void 회원정보조회() throws Exception {
-        //given
-        MemberSignUpDto memberSignUpDto = setMember();
-        Member member = memberRepository.findByUsername(memberSignUpDto.username()).orElseThrow(() -> new Exception());
-        clear();
-
-        //when
-        MemberInfoDto info = memberService.getInfo(member.getId());
-
-        //then
-        assertThat(info.getUsername()).isEqualTo(memberSignUpDto.username());
-        assertThat(info.getName()).isEqualTo(memberSignUpDto.name());
-        assertThat(info.getAge()).isEqualTo(memberSignUpDto.age());
-        assertThat(info.getNickName()).isEqualTo(memberSignUpDto.nickName());
     }
 
     @Test

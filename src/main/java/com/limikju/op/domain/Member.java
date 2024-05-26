@@ -53,8 +53,7 @@ public class Member extends BaseEntity {
     //== 회원탈퇴 -> 작성한 게시물, 댓글 모두 삭제 ==//
 
     //== 연관관계 메서드 ==//
-    public void addPost(Todo todo){
-        //post의 writer 설정은 post에서 함
+    public void addTodo(Todo todo){
         todoList.add(todo);
     }
 

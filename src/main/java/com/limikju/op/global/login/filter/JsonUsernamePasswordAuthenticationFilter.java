@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private static final String DEFAULT_LOGIN_REQUEST_URL = "/login";  // /login/oauth2/ + ????? 로 오는 요청을 처리할 것이다
+    private static final String DEFAULT_LOGIN_REQUEST_URL = "/api/member/login";
 
     private static final String HTTP_METHOD = "POST";    //HTTP 메서드의 방식은 POST 이다.
 
@@ -41,7 +41,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException {
 
         if(request.getContentType() == null || !request.getContentType().equals(CONTENT_TYPE)  ) {
             throw new AuthenticationServiceException("Authentication Content-Type not supported: " + request.getContentType());

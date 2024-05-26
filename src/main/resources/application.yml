@@ -12,7 +12,7 @@ spring:
         user_sql_cooments: true
 
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
 
   profiles:
     include: jwt
