@@ -2,7 +2,12 @@ package com.limikju.op.global.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.limikju.op.apiPayload.ApiResponse;
+import com.limikju.op.apiPayload.code.status.SuccessStatus;
+import com.limikju.op.converter.MemberConverter;
 import com.limikju.op.repository.MemberRepository;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
@@ -13,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +47,8 @@ public class JwtServiceImpl implements JwtService{
     private static final String USERNAME_CLAIM = "username";
     private static final String BEARER = "Bearer ";
     private final MemberRepository memberRepository;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public String createAccessToken(String username) {
@@ -78,12 +86,14 @@ public class JwtServiceImpl implements JwtService{
     }
 
     @Override
-    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken){
-        response.setStatus(HttpServletResponse.SC_OK);
-
-        setAccessTokenHeader(response, accessToken);
-        setRefreshTokenHeader(response, refreshToken);
-
+    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
+        String result = objectMapper.writeValueAsString(
+                ApiResponse.of(
+                        SuccessStatus.MEMBER_LOGIN,
+                        MemberConverter.toLoginResultDTO(accessToken, refreshToken)));
+        response.getWriter().write(result);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
 
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put(ACCESS_TOKEN_SUBJECT, accessToken);

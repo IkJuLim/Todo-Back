@@ -14,4 +14,4 @@ spring:
         show_sql: true #show sql
 
   profiles:
-    include: jwt
+    include: jwt, oauth

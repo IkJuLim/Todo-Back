@@ -2,7 +2,7 @@ package com.limikju.op.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.limikju.op.domain.Member;
-import com.limikju.op.domain.dto.memberDTO.MemberSignUpDto;
+import com.limikju.op.domain.dto.memberDTO.MemberRequestDTO;
 import com.limikju.op.repository.MemberRepository;
 import com.limikju.op.service.memberService.MemberService;
 import jakarta.persistence.EntityManager;
@@ -96,7 +96,7 @@ class MemberControllerTest {
     @Test
     public void 회원가입_성공() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
 
         //when
         signUp(signUpData);
@@ -113,11 +113,11 @@ class MemberControllerTest {
     @Test
     public void 회원가입_실패_필드가_없음() throws Exception {
         //given
-        String noUsernameSignUpData = objectMapper.writeValueAsString(new MemberSignUpDto(null, password, name, nickName, age));
-        String noPasswordSignUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, null, name, nickName, age));
-        String noNameSignUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, null, nickName, age));
-        String noNickNameSignUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, null, age));
-        String noAgeSignUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, null));
+        String noUsernameSignUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(null, password, name, nickName, age));
+        String noPasswordSignUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, null, name, nickName, age));
+        String noNameSignUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, null, nickName, age));
+        String noNickNameSignUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, null, age));
+        String noAgeSignUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, null));
 
         //when, then
         signUp(noUsernameSignUpData);//예외가 발생하더라도 상태코드는 200
@@ -135,7 +135,7 @@ class MemberControllerTest {
     @Test
     public void 회원정보수정_성공() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
 
         signUp(signUpData);
 
@@ -169,7 +169,7 @@ class MemberControllerTest {
     @Test
     public void 회원정보수정_원하는필드만변경_성공() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
         signUp(signUpData);
 
         String accessToken = getAccessToken();
@@ -200,7 +200,7 @@ class MemberControllerTest {
     @Test
     public void 비밀번호수정_성공() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
         signUp(signUpData);
 
         String accessToken = getAccessToken();
@@ -232,7 +232,7 @@ class MemberControllerTest {
     @Test
     public void 비밀번호수정_실패_검증비밀번호가_틀림() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
         signUp(signUpData);
 
         String accessToken = getAccessToken();
@@ -264,7 +264,7 @@ class MemberControllerTest {
     @Test
     public void 비밀번호수정_실패_바꾸려는_비밀번호_형식_올바르지않음() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
         signUp(signUpData);
 
         String accessToken = getAccessToken();
@@ -296,7 +296,7 @@ class MemberControllerTest {
     @Test
     public void 회원탈퇴_성공() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
         signUp(signUpData);
 
         String accessToken = getAccessToken();
@@ -324,7 +324,7 @@ class MemberControllerTest {
     @Test
     public void 회원탈퇴_실패_비밀번호틀림() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
         signUp(signUpData);
 
         String accessToken = getAccessToken();
@@ -354,7 +354,7 @@ class MemberControllerTest {
     @Test
     public void 회원탈퇴_실패_권한이없음() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
         signUp(signUpData);
 
         String accessToken = getAccessToken();
@@ -383,7 +383,7 @@ class MemberControllerTest {
     @Test
     public void 내정보조회_성공() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
         signUp(signUpData);
 
         String accessToken = getAccessToken();
@@ -412,7 +412,7 @@ class MemberControllerTest {
     @Test
     public void 내정보조회_실패_JWT없음() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
         signUp(signUpData);
 
         String accessToken = getAccessToken();
@@ -437,7 +437,7 @@ class MemberControllerTest {
     @Test
     public void 회원정보조회_성공() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
         signUp(signUpData);
 
         String accessToken = getAccessToken();
@@ -467,7 +467,7 @@ class MemberControllerTest {
     @Test
     public void 회원정보조회_실패_없는회원조회() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
         signUp(signUpData);
 
         String accessToken = getAccessToken();
@@ -489,7 +489,7 @@ class MemberControllerTest {
     @Test
     public void 회원정보조회_실패_JWT없음() throws Exception {
         //given
-        String signUpData = objectMapper.writeValueAsString(new MemberSignUpDto(username, password, name, nickName, age));
+        String signUpData = objectMapper.writeValueAsString(new MemberRequestDTO.MemberSignUpDTO(username, password, name, nickName, age));
         signUp(signUpData);
 
         String accessToken = getAccessToken();

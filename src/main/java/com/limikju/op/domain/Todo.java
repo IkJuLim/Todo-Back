@@ -24,8 +24,8 @@ public class Todo extends BaseEntity {
     @Column(name = "todo_id")
     private Long id;
 
-    @Column(name = "checked")
-    private boolean check;
+    @Column(name = "status")
+    private boolean status;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "owner")
@@ -38,8 +38,12 @@ public class Todo extends BaseEntity {
     private boolean isRemoved= false;
 
     //== 수정 ==//
-    public void updateContent(String title) {
+    public void updateTodo(String title, LocalDate dueDate) {
         this.title = title;
+        this.dueDate = dueDate;
+    }
+    public void updateTodoStatus(Boolean status) {
+        this.status = status;
     }
 
     //== 삭제 ==//
@@ -48,7 +52,7 @@ public class Todo extends BaseEntity {
     }
     @Builder
     public Todo(Member owner, String title, LocalDate dueDate) {
-        this.check = false;
+        this.status = false;
         this.owner = owner;
         this.title = title;
         this.dueDate = dueDate;

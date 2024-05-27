@@ -1,10 +1,10 @@
 package com.limikju.op.service.memberService;
 
+import com.limikju.op.converter.MemberConverter;
 import com.limikju.op.domain.Member;
-import com.limikju.op.domain.dto.memberDTO.MemberInfoDto;
-import com.limikju.op.domain.dto.memberDTO.MemberSignUpDto;
-import com.limikju.op.domain.dto.memberDTO.MemberUpdateDto;
-import com.limikju.op.domain.enums.MemberRole;
+import com.limikju.op.domain.dto.memberDTO.MemberRequestDTO;
+import com.limikju.op.domain.dto.memberDTO.MemberResponseDTO;
+import com.limikju.op.domain.enums.Role;
 import com.limikju.op.repository.MemberRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -44,12 +44,12 @@ class MemberServiceTest {
         em.clear();
     }
 
-    private MemberSignUpDto makeMemberSignUpDto() {
-        return new MemberSignUpDto("username",PASSWORD,"name","nickNAme",22);
+    private MemberRequestDTO.MemberSignUpDTO makeMemberSignUpDto() {
+        return new MemberRequestDTO.MemberSignUpDTO("username",PASSWORD,"name","nickNAme",22);
     }
 
-    private MemberSignUpDto setMember() throws Exception {
-        MemberSignUpDto memberSignUpDto = makeMemberSignUpDto();
+    private MemberRequestDTO.MemberSignUpDTO setMember() throws Exception {
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = makeMemberSignUpDto();
         memberService.signUp(memberSignUpDto);
         clear();
         SecurityContext emptyContext = SecurityContextHolder.createEmptyContext();
@@ -57,7 +57,7 @@ class MemberServiceTest {
         emptyContext.setAuthentication(new UsernamePasswordAuthenticationToken(User.builder()
                 .username(memberSignUpDto.username())
                 .password(memberSignUpDto.password())
-                .roles(MemberRole.USER.name())
+                .roles(Role.USER.name())
                 .build(),
                 null, null));
 
@@ -81,7 +81,7 @@ class MemberServiceTest {
     @Test
     public void 회원가입_성공() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = makeMemberSignUpDto();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = makeMemberSignUpDto();
 
         //when
         memberService.signUp(memberSignUpDto);
@@ -94,14 +94,14 @@ class MemberServiceTest {
         assertThat(member.getName()).isEqualTo(memberSignUpDto.name());
         assertThat(member.getNickName()).isEqualTo(memberSignUpDto.nickName());
         assertThat(member.getAge()).isEqualTo(memberSignUpDto.age());
-        assertThat(member.getRole()).isSameAs(MemberRole.USER);
+        assertThat(member.getRole()).isSameAs(Role.USER);
 
     }
 
     @Test
     public void 회원가입_실패_원인_아이디중복() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = makeMemberSignUpDto();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = makeMemberSignUpDto();
         memberService.signUp(memberSignUpDto);
         clear();
 
@@ -114,23 +114,17 @@ class MemberServiceTest {
     @Test
     public void 회원가입_실패_입력하지않은_필드가있으면_오류() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto1 = new MemberSignUpDto(null,passwordEncoder.encode(PASSWORD),"name","nickNAme",22);
-        MemberSignUpDto memberSignUpDto2 = new MemberSignUpDto("username",null,"name","nickNAme",22);
-        MemberSignUpDto memberSignUpDto3 = new MemberSignUpDto("username",passwordEncoder.encode(PASSWORD),null,"nickNAme",22);
-        MemberSignUpDto memberSignUpDto4 = new MemberSignUpDto("username",passwordEncoder.encode(PASSWORD),"name",null,22);
-        MemberSignUpDto memberSignUpDto5 = new MemberSignUpDto("username",passwordEncoder.encode(PASSWORD),"name","nickNAme",null);
-
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto1 = new MemberRequestDTO.MemberSignUpDTO(null,passwordEncoder.encode(PASSWORD),"name","nickNAme",22);
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto2 = new MemberRequestDTO.MemberSignUpDTO("username",null,"name","nickNAme",22);
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto3 = new MemberRequestDTO.MemberSignUpDTO("username",passwordEncoder.encode(PASSWORD),null,"nickNAme",22);
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto4 = new MemberRequestDTO.MemberSignUpDTO("username",passwordEncoder.encode(PASSWORD),"name",null,22);
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto5 = new MemberRequestDTO.MemberSignUpDTO("username",passwordEncoder.encode(PASSWORD),"name","nickNAme",null);
 
         //when, then
-
         assertThrows(Exception.class, () -> memberService.signUp(memberSignUpDto1));
-
         assertThrows(Exception.class, () -> memberService.signUp(memberSignUpDto2));
-
         assertThrows(Exception.class, () -> memberService.signUp(memberSignUpDto3));
-
         assertThrows(Exception.class, () -> memberService.signUp(memberSignUpDto4));
-
         assertThrows(Exception.class, () -> memberService.signUp(memberSignUpDto5));
     }
 
@@ -152,7 +146,7 @@ class MemberServiceTest {
     @Test
     public void 회원수정_비밀번호수정_성공() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = setMember();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = setMember();
 
 
         //when
@@ -171,11 +165,11 @@ class MemberServiceTest {
     @Test
     public void 회원수정_이름만수정() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = setMember();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = setMember();
 
         //when
         String updateName = "변경할래용";
-        memberService.update(new MemberUpdateDto(Optional.of(updateName),Optional.empty(), Optional.empty()));
+        memberService.update(new MemberRequestDTO.MemberUpdateDTO(Optional.of(updateName),Optional.empty(), Optional.empty()));
         clear();
 
         //then
@@ -189,11 +183,11 @@ class MemberServiceTest {
     @Test
     public void 회원수정_별명만수정() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = setMember();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = setMember();
 
         //when
         String updateNickName = "변경할래용";
-        memberService.update(new MemberUpdateDto(Optional.empty(), Optional.of(updateNickName), Optional.empty()));
+        memberService.update(new MemberRequestDTO.MemberUpdateDTO(Optional.empty(), Optional.of(updateNickName), Optional.empty()));
         clear();
 
         //then
@@ -208,11 +202,11 @@ class MemberServiceTest {
     @Test
     public void 회원수정_나이만수정() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = setMember();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = setMember();
 
         //when
         Integer updateAge = 33;
-        memberService.update(new MemberUpdateDto(Optional.empty(),  Optional.empty(), Optional.of(updateAge)));
+        memberService.update(new MemberRequestDTO.MemberUpdateDTO(Optional.empty(),  Optional.empty(), Optional.of(updateAge)));
         clear();
 
         //then
@@ -227,12 +221,12 @@ class MemberServiceTest {
     @Test
     public void 회원수정_이름별명수정() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = setMember();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = setMember();
 
         //when
         String updateNickName = "변경할래요옹";
         String updateName = "변경할래용";
-        memberService.update(new MemberUpdateDto(Optional.of(updateName),Optional.of(updateNickName),Optional.empty()));
+        memberService.update(new MemberRequestDTO.MemberUpdateDTO(Optional.of(updateName),Optional.of(updateNickName),Optional.empty()));
         clear();
 
         //then
@@ -248,12 +242,12 @@ class MemberServiceTest {
     @Test
     public void 회원수정_이름나이수정() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = setMember();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = setMember();
 
         //when
         Integer updateAge = 33;
         String updateName = "변경할래용";
-        memberService.update(new MemberUpdateDto(Optional.of(updateName),Optional.empty(),Optional.of(updateAge)));
+        memberService.update(new MemberRequestDTO.MemberUpdateDTO(Optional.of(updateName),Optional.empty(),Optional.of(updateAge)));
         clear();
 
         //then
@@ -269,12 +263,12 @@ class MemberServiceTest {
     @Test
     public void 회원수정_별명나이수정() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = setMember();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = setMember();
 
         //when
         Integer updateAge = 33;
         String updateNickname = "변경할래용";
-        memberService.update(new MemberUpdateDto(Optional.empty(),Optional.of(updateNickname),Optional.of(updateAge)));
+        memberService.update(new MemberRequestDTO.MemberUpdateDTO(Optional.empty(),Optional.of(updateNickname),Optional.of(updateAge)));
         clear();
 
         //then
@@ -290,13 +284,13 @@ class MemberServiceTest {
     @Test
     public void 회원수정_이름별명나이수정() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = setMember();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = setMember();
 
         //when
         Integer updateAge = 33;
         String updateNickname = "변경할래용";
         String updateName = "변경할래용";
-        memberService.update(new MemberUpdateDto(Optional.of(updateName),Optional.of(updateNickname),Optional.of(updateAge)));
+        memberService.update(new MemberRequestDTO.MemberUpdateDTO(Optional.of(updateName),Optional.of(updateNickname),Optional.of(updateAge)));
         clear();
 
         //then
@@ -315,7 +309,7 @@ class MemberServiceTest {
     @Test
     public void 회원탈퇴() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = setMember();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = setMember();
 
         //when
         memberService.withdraw(PASSWORD);
@@ -328,7 +322,7 @@ class MemberServiceTest {
     @Test
     public void 회원탈퇴_실패_비밀번호가_일치하지않음() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = setMember();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = setMember();
 
         //when, then TODO : MemberException으로 고쳐야 함
         assertThat(assertThrows(Exception.class ,() -> memberService.withdraw(PASSWORD+"1")).getMessage()).isEqualTo("비밀번호가 일치하지 않습니다.");
@@ -338,10 +332,11 @@ class MemberServiceTest {
     @Test
     public void 내정보조회() throws Exception {
         //given
-        MemberSignUpDto memberSignUpDto = setMember();
+        MemberRequestDTO.MemberSignUpDTO memberSignUpDto = setMember();
 
         //when
-        MemberInfoDto myInfo = memberService.getMyInfo();
+        Member member = memberService.getMember();
+        MemberResponseDTO.MemberInfoDTO myInfo = MemberConverter.toMemberInfoDTO(member);
 
         //then
         assertThat(myInfo.getUsername()).isEqualTo(memberSignUpDto.username());

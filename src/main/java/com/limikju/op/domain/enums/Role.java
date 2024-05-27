@@ -1,5 +1,5 @@
 package com.limikju.op.domain.enums;
 
-public enum MemberRole {
+public enum Role {
     ADMIN, USER
 }

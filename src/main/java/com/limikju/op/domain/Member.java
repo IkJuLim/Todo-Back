@@ -2,7 +2,7 @@ package com.limikju.op.domain;
 
 
 import com.limikju.op.domain.common.BaseEntity;
-import com.limikju.op.domain.enums.MemberRole;
+import com.limikju.op.domain.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,7 +44,7 @@ public class Member extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private MemberRole role;//권한 -> USER, ADMIN
+    private Role role;//권한 -> USER, ADMIN
 
     @Column(length = 1000)
     private String refreshToken;//RefreshToken
@@ -94,7 +94,7 @@ public class Member extends BaseEntity {
 
     //회원가입시, USER의 권한을 부여하는 메서드입니다.
     public void addUserAuthority() {
-        this.role = MemberRole.USER;
+        this.role = Role.USER;
     }
 }
 

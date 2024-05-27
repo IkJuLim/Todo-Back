@@ -3,6 +3,7 @@ package com.limikju.op.global.jwt;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public interface JwtService {
@@ -14,7 +15,7 @@ public interface JwtService {
 
     void destroyRefreshToken(String username);
 
-    void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken);
+    void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) throws IOException;
     void sendAccessToken(HttpServletResponse response, String accessToken);
 
     Optional<String> extractAccessToken(HttpServletRequest request);
