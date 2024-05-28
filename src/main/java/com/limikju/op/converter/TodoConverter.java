@@ -10,6 +10,7 @@ public class TodoConverter {
     public static TodoResponseDTO.AddResponseDTO toTodoAddResultDTO(Todo todo) {
         TodoResponseDTO.AddResponseDTO addResponseDTO =
                 TodoResponseDTO.AddResponseDTO.builder()
+                        .id(todo.getId())
                         .title(todo.getTitle())
                         .dueDate(todo.getDueDate())
                         .status(todo.isStatus())
