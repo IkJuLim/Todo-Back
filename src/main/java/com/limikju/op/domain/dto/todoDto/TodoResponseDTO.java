@@ -59,6 +59,7 @@ public class TodoResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UpdateStatusResponseDTO {
+        private Long id;
         private String title;
         private LocalDate dueDate;
         private Boolean status;
