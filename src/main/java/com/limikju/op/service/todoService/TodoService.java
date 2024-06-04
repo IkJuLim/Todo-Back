@@ -2,7 +2,8 @@ package com.limikju.op.service.todoService;
 
 import com.limikju.op.domain.Todo;
 import com.limikju.op.domain.dto.todoDto.TodoRequestDTO;
-import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface TodoService {
 
     Todo findById(Long id) throws Exception;
 
-    List<Todo> findAll();
+    List<Todo> findAllTodo(String sort);
 
     void deleteAll();
 

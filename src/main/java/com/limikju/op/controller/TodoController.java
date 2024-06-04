@@ -7,7 +7,6 @@ import com.limikju.op.domain.Todo;
 import com.limikju.op.domain.dto.todoDto.TodoRequestDTO;
 import com.limikju.op.domain.dto.todoDto.TodoResponseDTO;
 import com.limikju.op.service.todoService.TodoService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -28,37 +27,41 @@ public class TodoController {
     }
 
     @GetMapping("/{todoId}")
-    public ApiResponse<TodoResponseDTO.GetResponseDTO> getTodo(@Valid @PathVariable Long todoId, HttpServletRequest httpServletRequest) throws Exception {
+    public ApiResponse<TodoResponseDTO.GetResponseDTO> getTodo(@Valid @PathVariable Long todoId) throws Exception {
         Todo todo = todoService.findById(todoId);
         return ApiResponse.of(SuccessStatus.TODO_GET_ONE, TodoConverter.toTodoGetResultDTO(todo));
     }
 
     @GetMapping("/all")
-    public ApiResponse<TodoResponseDTO.GetListResponseDTO> getTodoList(HttpServletRequest httpServletRequest) {
-        List<Todo> todoList = todoService.findAll();
-        return ApiResponse.of(SuccessStatus.TODO_GET_ALL, TodoConverter.toTodoGetListResultDTO(todoList));
+    public ApiResponse<TodoResponseDTO.GetListResponseDTO> getTodoPage(@RequestParam(value="orderBy", required = false, defaultValue="CREATE_AT_DESC") String orderBy) {
+        List<Todo> todoPage = todoService.findAllTodo(orderBy);
+        return ApiResponse.of(SuccessStatus.TODO_GET_ALL, TodoConverter.toTodoGetListResultDTO(todoPage));
     }
 
     @DeleteMapping("/{todoId}")
-    public ApiResponse<TodoResponseDTO.DeleteOneResponseDTO> deleteTodo(@Valid @PathVariable Long todoId, HttpServletRequest httpServletRequest) throws Exception {
+    public ApiResponse<TodoResponseDTO.DeleteOneResponseDTO> deleteTodo(@Valid @PathVariable Long todoId) {
         todoService.deleteTodo(todoId);
         return ApiResponse.of(SuccessStatus.TODO_DELETE_ONE, TodoConverter.toDeleteOneResultDTO());
     }
 
     @DeleteMapping("/all")
-    public ApiResponse<TodoResponseDTO.DeleteAllResponseDTO> deleteAllTodo(HttpServletRequest httpServletRequest) {
+    public ApiResponse<TodoResponseDTO.DeleteAllResponseDTO> deleteAllTodo() {
         todoService.deleteAll();
         return ApiResponse.of(SuccessStatus.TODO_DELETE_ALL, TodoConverter.toDeleteAllResultDTO());
     }
 
     @PatchMapping("/status/{todoId}")
-    public ApiResponse<TodoResponseDTO.UpdateStatusResponseDTO> updateStatusTodo(@Valid @PathVariable Long todoId, @Valid @RequestBody TodoRequestDTO.UpdateStatusDTO updateStatusDto, HttpServletRequest httpServletRequest) throws Exception {
+    public ApiResponse<TodoResponseDTO.UpdateStatusResponseDTO> updateStatusTodo(
+            @Valid @PathVariable Long todoId,
+            @Valid @RequestBody TodoRequestDTO.UpdateStatusDTO updateStatusDto) {
         Todo todo = todoService.updateStatus(todoId, updateStatusDto.getStatus());
         return ApiResponse.of(SuccessStatus.TODO_UPDATE_STATUS, TodoConverter.toUpdateStatusResultDTO(todo));
     }
 
     @PatchMapping("/{todoId}")
-    public ApiResponse<TodoResponseDTO.UpdateResponseDTO> updateTodo(@Valid @PathVariable Long todoId, @Valid @RequestBody TodoRequestDTO.UpdateDTO updateDto, HttpServletRequest httpServletRequest) throws Exception {
+    public ApiResponse<TodoResponseDTO.UpdateResponseDTO> updateTodo(
+            @Valid @PathVariable Long todoId,
+            @Valid @RequestBody TodoRequestDTO.UpdateDTO updateDto) {
         Todo todo = todoService.update(todoId, updateDto);
         return ApiResponse.of(SuccessStatus.TODO_UPDATE_DATA, TodoConverter.toUpdateResponseDTO(todo));
     }

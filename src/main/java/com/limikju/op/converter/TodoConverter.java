@@ -30,11 +30,10 @@ public class TodoConverter {
     }
 
     public static TodoResponseDTO.GetListResponseDTO toTodoGetListResultDTO(List<Todo> todoList) {
-        TodoResponseDTO.GetListResponseDTO getListResponseDTO =
-                TodoResponseDTO.GetListResponseDTO.builder()
-                        .todoList(todoList.stream().map(TodoConverter::toTodoGetResultDTO).collect(Collectors.toList()))
-                        .build();
-        return getListResponseDTO;
+        return TodoResponseDTO.GetListResponseDTO.builder()
+                .size(todoList.size())
+                .todoList(todoList.stream().map(TodoConverter::toTodoGetResultDTO).collect(Collectors.toList()))
+                .build();
     }
 
     public static TodoResponseDTO.DeleteOneResponseDTO toDeleteOneResultDTO() {

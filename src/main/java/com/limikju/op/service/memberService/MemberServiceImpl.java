@@ -46,13 +46,13 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public Member updatePassword(String checkPassword, String toBePassword) {
+    public Member updatePassword(MemberRequestDTO.MemberUpdatePasswordDTO memberUpdatePasswordDTO) {
         Member member = memberRepository.findByUsername(SecurityUtil.getLoginUsername()).orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
 
-        if(!member.matchPassword(passwordEncoder, checkPassword) ) {
-            throw new MemberHandler(ErrorStatus.MEMBER_INVALID_PASSWORD);
+        if(!member.matchPassword(passwordEncoder, memberUpdatePasswordDTO.checkPassword()) ) {
+            throw new MemberHandler(ErrorStatus.MEMBER_PASSWORD_NOT_MATCHED);
         }
-        member.updatePassword(passwordEncoder, toBePassword);
+        member.updatePassword(passwordEncoder, memberUpdatePasswordDTO.toBePassword());
 
         return member;
     }

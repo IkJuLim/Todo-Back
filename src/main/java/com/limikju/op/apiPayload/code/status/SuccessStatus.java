@@ -16,9 +16,10 @@ public enum SuccessStatus implements BaseCode {
     // 멤버 관련 응답
     MEMBER_FOUND(HttpStatus.OK,"MEMBER2001", "회원 조회 성공"),
     MEMBER_UPDATE(HttpStatus.OK, "MEMBER2002", "회원 정보 업데이트 성공"),
-    MEMBER_DELETE(HttpStatus.OK, "MEMBER2003", "회원 탈퇴 성공"),
-    MEMBER_JOIN(HttpStatus.OK, "MEMBER2004", "회원 가입 성공"),
-    MEMBER_LOGIN(HttpStatus.OK, "MEMBER2005", "로그인 성공"),
+    MEMBER_UPDATE_PASSWORD(HttpStatus.OK, "MEMBER2003", "회원 비밀번호 업데이트 성공"),
+    MEMBER_DELETE(HttpStatus.OK, "MEMBER2004", "회원 탈퇴 성공"),
+    MEMBER_JOIN(HttpStatus.OK, "MEMBER2005", "회원 가입 성공"),
+    MEMBER_LOGIN(HttpStatus.OK, "MEMBER2006", "로그인 성공"),
 
     // TODO 관련 응답
     TODO_ADD(HttpStatus.OK, "TODO2000", "TODO 추가 성공"),

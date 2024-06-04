@@ -47,6 +47,16 @@ public class MemberController {
     }
 
     /**
+     * 회원비밀번호수정
+     */
+    @PatchMapping("/password")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<MemberResponseDTO.UpdatePasswordResultDTO> updatePassword(@Valid @RequestBody MemberRequestDTO.MemberUpdatePasswordDTO memberUpdatePasswordDTO) throws Exception {
+        Member member = memberService.updatePassword(memberUpdatePasswordDTO);
+        return ApiResponse.of(SuccessStatus.MEMBER_UPDATE_PASSWORD, MemberConverter.toUpdatePasswordResultDTO(member));
+    }
+
+    /**
      * 회원탈퇴
      */
     @DeleteMapping

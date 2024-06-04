@@ -18,7 +18,7 @@ public interface MemberService {
     Member signUp(MemberRequestDTO.MemberSignUpDTO memberSignUpDto) throws Exception;
 
     Member update(MemberRequestDTO.MemberUpdateDTO memberUpdateDto) throws Exception;
-    Member updatePassword(String checkPassword, String toBePassword) throws Exception;
+    Member updatePassword(MemberRequestDTO.MemberUpdatePasswordDTO memberUpdatePasswordDTO) throws Exception;
 
     Long withdraw(String checkPassword) throws Exception;
 

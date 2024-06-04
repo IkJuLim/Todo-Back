@@ -1,6 +1,7 @@
 package com.limikju.op.converter;
 
 import com.limikju.op.domain.Member;
+import com.limikju.op.domain.dto.memberDTO.MemberRequestDTO;
 import com.limikju.op.domain.dto.memberDTO.MemberResponseDTO;
 
 public class MemberConverter {
@@ -13,6 +14,16 @@ public class MemberConverter {
 
     public static MemberResponseDTO.UpdateResultDTO toUpdateResultDTO(Member member) {
         return MemberResponseDTO.UpdateResultDTO.builder()
+                .member_id(member.getId())
+                .name(member.getName())
+                .nickName(member.getNickName())
+                .age(member.getAge())
+                .update_at(member.getUpdatedAt())
+                .build();
+    }
+
+    public static MemberResponseDTO.UpdatePasswordResultDTO toUpdatePasswordResultDTO(Member member) {
+        return MemberResponseDTO.UpdatePasswordResultDTO.builder()
                 .member_id(member.getId())
                 .name(member.getName())
                 .nickName(member.getNickName())

@@ -11,6 +11,8 @@ import com.limikju.op.repository.TodoRepository;
 import com.limikju.op.util.security.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.token.TokenService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,11 +49,18 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Todo> findAll() {
+    public List<Todo> findAllTodo(String orderBy) {
         String username = SecurityUtil.getLoginUsername();
         Member member = memberRepository.findByUsername(username).orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND));
-        List<Todo> todoList = todoRepository.findAllByOwner(member);
-        return todoList;
+        return switch (orderBy) {
+            case "Decrease : Title" -> todoRepository.findAllByOwnerOrderByTitleDesc(member);
+            case "Increase : Title" -> todoRepository.findAllByOwnerOrderByTitleAsc(member);
+            case "Decrease : Due Date" -> todoRepository.findAllByOwnerOrderByDueDateDesc(member);
+            case "Increase : Due Date" -> todoRepository.findAllByOwnerOrderByDueDateAsc(member);
+            case "Decrease : Create At" -> todoRepository.findAllByOwnerOrderByCreatedAtAsc(member);
+            case "Increase : Create At" -> todoRepository.findAllByOwnerOrderByCreatedAtDesc(member);
+            default -> throw new TodoHandler(ErrorStatus.TODO_ORDER_BY_INVALID);
+        };
     }
 
     @Override

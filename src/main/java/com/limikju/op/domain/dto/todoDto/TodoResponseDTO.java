@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,7 +38,8 @@ public class TodoResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class GetListResponseDTO {
-        List<GetResponseDTO> todoList;
+        private int size;
+        private List<GetResponseDTO> todoList;
     }
 
     @Builder

@@ -151,7 +151,8 @@ class MemberServiceTest {
 
         //when
         String toBePassword = "1234567890!@#!@#";
-        memberService.updatePassword(PASSWORD, toBePassword);
+        MemberRequestDTO.MemberUpdatePasswordDTO memberUpdatePasswordDTO = new MemberRequestDTO.MemberUpdatePasswordDTO(PASSWORD, toBePassword);
+        memberService.updatePassword(memberUpdatePasswordDTO);
         clear();
 
         //then

@@ -32,6 +32,18 @@ public class MemberResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class UpdatePasswordResultDTO {
+        private Long member_id;
+        private String name;
+        private String nickName;
+        private int age;
+        private LocalDateTime update_at;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class WithdrawResultDTO {
         private Long member_id;
     }
