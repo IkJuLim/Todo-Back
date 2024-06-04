@@ -4,7 +4,6 @@ import com.limikju.op.apiPayload.code.status.ErrorStatus;
 import com.limikju.op.apiPayload.exception.handler.MemberHandler;
 import com.limikju.op.domain.Member;
 import com.limikju.op.domain.dto.memberDTO.MemberRequestDTO;
-import com.limikju.op.domain.dto.memberDTO.MemberResponseDTO;
 import com.limikju.op.repository.MemberRepository;
 import com.limikju.op.util.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
@@ -44,6 +41,7 @@ public class MemberServiceImpl implements MemberService{
         memberUpdateDto.age().ifPresent(member::updateAge);
         memberUpdateDto.name().ifPresent(member::updateName);
         memberUpdateDto.nickName().ifPresent(member::updateNickName);
+
         return member;
     }
 

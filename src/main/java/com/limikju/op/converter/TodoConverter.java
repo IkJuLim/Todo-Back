@@ -59,6 +59,7 @@ public class TodoConverter {
     public static TodoResponseDTO.UpdateResponseDTO toUpdateResponseDTO(Todo todo) {
         TodoResponseDTO.UpdateResponseDTO updateResponseDTO =
                 TodoResponseDTO.UpdateResponseDTO.builder()
+                        .id(todo.getId())
                         .title(todo.getTitle())
                         .dueDate(todo.getDueDate())
                         .status(todo.isStatus())
